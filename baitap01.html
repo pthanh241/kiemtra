@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bài 1 - Carousel</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .carousel {
+      max-width: 900px;
+      margin: 3rem auto;
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 0.8s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 500px;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .prev, .next {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      padding: 1rem;
+      cursor: pointer;
+      font-size: 2rem;
+      user-select: none;
+    }
+
+    .prev { left: 10px; }
+    .next { right: 10px; }
+
+    .prev:hover, .next:hover {
+      background: rgba(0,0,0,0.8);
+    }
+
+    @media (max-width: 768px) {
+      .slide { height: 350px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Bài 1 - Carousel hình ảnh</h1>
+  </header>
+
+  <div class="carousel">
+    <div class="slides" id="slides">
+      <div class="slide"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4" alt="1"></div>
+      <div class="slide"><img src="https://images.unsplash.com/photo-1519681393784-d120267933ba" alt="2"></div>
+      <div class="slide"><img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05" alt="3"></div>
+      <div class="slide"><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e" alt="4"></div>
+      <div class="slide"><img src="https://images.unsplash.com/photo-1501854140801-50d016089b9a" alt="5"></div>
+      <div class="slide"><img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e" alt="6"></div>
+    </div>
+    <button class="prev" onclick="prevSlide()">❮</button>
+    <button class="next" onclick="nextSlide()">❯</button>
+  </div>
+
+  <script>
+    let currentIndex = 0;
+    const slides = document.getElementById('slides');
+    const totalSlides = document.querySelectorAll('.slide').length;
+
+    function showSlide(index) {
+      // Giữ index trong khoảng hợp lệ
+      if (index >= totalSlides) index = 0;
+      if (index < 0) index = totalSlides - 1;
+      currentIndex = index;
+      slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+
+    function nextSlide() {
+      showSlide(currentIndex + 1);
+    }
+
+    function prevSlide() {
+      showSlide(currentIndex - 1);
+    }
+
+    // Tự động chuyển slide mỗi 3 giây
+    setInterval(nextSlide, 3000);
+
+    // Khởi tạo
+    showSlide(currentIndex);
+  </script>
+
+  <div style="text-align:center; margin:2rem;">
+    <a href="index.html">← Quay về trang chủ</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bài 2 - Todo List</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .todo-container {
+      max-width: 600px;
+      margin: 3rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .input-group {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+
+    input[type="text"] {
+      padding: 0.8rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      padding: 0.8rem 1.5rem;
+      background: #27ae60;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover { background: #219653; }
+
+    .todo-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .todo-item {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      padding: 0.8rem;
+      background: #f9f9f9;
+      border-radius: 5px;
+    }
+
+    .todo-item.completed {
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    .delete-btn {
+      background: #e74c3c;
+    }
+
+    .delete-btn:hover { background: #c0392b; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Bài 2 - Danh sách công việc</h1>
+  </header>
+
+  <div class="todo-container">
+    <div class="input-group">
+      <input type="text" id="taskInput" placeholder="Nhập công việc mới...">
+      <button onclick="addTask()">Thêm</button>
+    </div>
+
+    <div class="todo-list" id="todoList"></div>
+  </div>
+
+  <script>
+    const todoList = document.getElementById('todoList');
+    const taskInput = document.getElementById('taskInput');
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+    function renderTasks() {
+      todoList.innerHTML = '';
+      tasks.forEach((task, index) => {
+        const item = document.createElement('div');
+        item.className = `todo-item ${task.completed ? 'completed' : ''}`;
+        item.innerHTML = `
+          <span>${task.text}</span>
+          <button onclick="toggleTask(${index})">${task.completed ? 'Bỏ hoàn thành' : 'Hoàn thành'}</button>
+          <button class="delete-btn" onclick="deleteTask(${index})">Xóa</button>
+        `;
+        todoList.appendChild(item);
+      });
+    }
+
+    function addTask() {
+      const text = taskInput.value.trim();
+      if (!text) return;
+      tasks.push({ text, completed: false });
+      taskInput.value = '';
+      saveAndRender();
+    }
+
+    function toggleTask(index) {
+      tasks[index].completed = !tasks[index].completed;
+      saveAndRender();
+    }
+
+    function deleteTask(index) {
+      tasks.splice(index, 1);
+      saveAndRender();
+    }
+
+    function saveAndRender() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+      renderTasks();
+    }
+
+    // Khởi tạo
+    renderTasks();
+
+    // Enter để thêm
+    taskInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter') addTask();
+    });
+  </script>
+
+  <div style="text-align:center; margin:2rem;">
+    <a href="index.html">← Quay về trang chủ</a>
+  </div>
+</body>
+</html>
